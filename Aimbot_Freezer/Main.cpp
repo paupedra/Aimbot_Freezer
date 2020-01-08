@@ -118,23 +118,17 @@ int main(int argc, char* argv[])
 
 		if (ball_p.pos.y > 700)
 		{
-			ball_p.speed.y = -ball_p.speed.y * 0.8;
+			ball_p.speed.y = -ball_p.speed.y * 0.8; //Floor Bounce
 			ball_p.pos.y = 700;
 
-			if (ball_p.speed.x > 10) //Simulated friction
-			{
-				ball_p.speed.x -= 10;
-			}
-			else if(ball_p.speed.x < -10)
-			{
-				ball_p.speed.x += 10;
-			}
-			else if(ball_p.speed.x < 10 || ball_p.speed.x > -10)
+			ball_p.speed.x = ball_p.speed.x * 0.95; //Friction
+			
+			if(ball_p.speed.x < 10 || ball_p.speed.x > -10)
 			{
 				ball_p.speed.x = 0;
 			}
 		}
-		if (ball_p.pos.x > 1000)
+		if (ball_p.pos.x > 1000) //Wall bounce
 		{
 			ball_p.speed.x = -ball_p.speed.x * 0.8;
 			ball_p.pos.x = 1000;

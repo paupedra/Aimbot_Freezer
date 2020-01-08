@@ -5,9 +5,12 @@
 
 #include "SDL/include/SDL.h"
 #include "SDL_image/include/SDL_image.h"
+#include "SDL_ttf\include\SDL_ttf.h"
+
 #pragma comment( lib, "SDL/libx86/SDL2.lib" )
 #pragma comment( lib, "SDL/libx86/SDL2main.lib" )
 #pragma comment( lib, "SDL_image/libx86/SDL2_image.lib" )
+#pragma comment( lib, "SDL_ttf/libx86/SDL2_ttf.lib" )
 
 // Configuration
 #define SCREEN_SIZE 1
@@ -123,6 +126,16 @@ int Init()
 	{
 		LOG("Could not initialize Image lib. IMG_Init: %s", IMG_GetError());
 		return 0;
+	}
+
+	if (TTF_Init() == -1)
+	{
+		LOG("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
+		return 0;
+	}
+	else
+	{
+		//font = Load("Assets/Fonts/Minecraftia-Regular.ttf", 12);
 	}
 
 	return 1;
