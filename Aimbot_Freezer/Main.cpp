@@ -146,9 +146,9 @@ int main(int argc, char* argv[])
 			ball_p.speed.y = -ball_p.speed.y * 0.8; //Floor Bounce
 			ball_p.pos.y = 700;
 
-			ball_p.speed.x = ball_p.speed.x * 0.95; //Friction
+			ball_p.speed.x = ball_p.speed.x * 1; //Friction
 			
-			if(ball_p.speed.x < 10 || ball_p.speed.x > -10)
+			if(ball_p.speed.x < 1 || ball_p.speed.x > -1)
 			{
 				ball_p.speed.x = 0;
 			}
@@ -165,14 +165,13 @@ int main(int argc, char* argv[])
 		}
 
 		/* Draw the ball */
-		Blit(ball.tex, ball_p.pos.x, ball_p.pos.y, &ball.rect,0);
+		Blit(ball.tex, ball_p.pos.x, ball_p.pos.y, &ball.rect,120);
 
 		// Draw canon
 		rotAngle = 0;
 		Blit(canon.tex, canon.x, canon.y, &canon.rect, rotAngle);
 
 		//Draw Text
-
 		Blit(textTexture, 100, 100,NULL,0);
 
 		PostUpdate(); // Presents the screen
