@@ -24,10 +24,18 @@ struct Ball
 
 struct Canon
 {
-	SDL_Rect rect;    // position in the texture
+	SDL_Rect rect;    // cannon position in the texture
+	SDL_Rect standRect;    // stand
 	SDL_Texture* tex; // texture
 	float x, y;       // position in the world
 	float angle;	// rotation angle
+};
+
+struct Enemy
+{
+	SDL_Rect koopaRect;    // cannon position in the texture
+	SDL_Texture* tex; // texture
+	float x, y;       // position in the world
 };
 
 int main(int argc, char* argv[])
@@ -58,14 +66,16 @@ int main(int argc, char* argv[])
 	SDL_Texture *texScreen = LoadTexture("Assets/Screens/Background.jpg");
 	SDL_Texture *texBall = LoadTexture("Assets/Sprites/kirby_ball.png");
 	SDL_Texture *textTexture = Print("45",textColor,font);
-	SDL_Texture* texCanon = LoadTexture("Assets/Sprites/Canon.png");
-	SDL_Texture *textTexture = Print("hola",textColor,font);
+	SDL_Texture* texCanon = LoadTexture("Assets/Sprites/Cannon.png");
+	SDL_Texture* texKoopa = LoadTexture("Assets/Sprites/Koopa.png");
 
 	float rotAngle = 0;
+
 	Canon canon = {
-		{0,0,512,512},
+		{0,0,128,128},
+		{0,128,128,192},
 		texCanon,
-		10, 550,
+		10, 665,
 		rotAngle
 	};
 
@@ -74,6 +84,12 @@ int main(int argc, char* argv[])
 		texBall,          // SDL_Texture
 		270, 100,         // Initial position in the screen
 		0, 0              // Initial velocity
+	};
+
+	Enemy koopa = {
+		{0,0,160,230},
+		texKoopa,
+		10,10
 	};
 
 	//Ball particle
@@ -129,23 +145,47 @@ int main(int argc, char* argv[])
 		{
 			force.x -= 500.0f;
 		}
-
+		//Move Cannon
+		if (keys[SDL_SCANCODE_D] == KEY_DOWN)
+		{
+			canon.x += 500 * dt;
+		}
+		if (keys[SDL_SCANCODE_A] == KEY_DOWN)
+		{
+			canon.x -= 500 * dt;
+		}
+		if (keys[SDL_SCANCODE_W] == KEY_DOWN)
+		{
+			canon.y -= 500 * dt;
+		}
+		if (keys[SDL_SCANCODE_S] == KEY_DOWN)
+		{
+			canon.y += 500 * dt;
+		}
+		//Move koopa
+		if (keys[SDL_SCANCODE_RIGHT] == KEY_DOWN)
+		{
+			koopa.x += 500 * dt;
+		}
+		if (keys[SDL_SCANCODE_LEFT] == KEY_DOWN)
+		{
+			koopa.x -= 500 * dt;
+		}
 		if (keys[SDL_SCANCODE_UP] == KEY_DOWN)
 		{
-			angle += 1;
+			koopa.y -= 500 * dt;
 		}
-		if (keys[SDL_SCANCODE_DOWN] == 0)
+		if (keys[SDL_SCANCODE_DOWN] == KEY_DOWN)
 		{
-			angle -= 1;
+			koopa.y += 500 * dt;
 		}
-
 		//Verlet
 		Verlet(&ball_p, &ball_p, force, dt);
 
-		if (ball_p.pos.y > 700)
+		if (ball_p.pos.y > 740)
 		{
 			ball_p.speed.y = -ball_p.speed.y * 0.8; //Floor Bounce
-			ball_p.pos.y = 700;
+			ball_p.pos.y = 740;
 
 			ball_p.speed.x = ball_p.speed.x * 1; //Friction
 			
@@ -168,6 +208,9 @@ int main(int argc, char* argv[])
 		/* Draw the ball */
 		Blit(ball.tex, ball_p.pos.x, ball_p.pos.y, &ball.rect,0);
 
+		//Draw Koopa
+		Blit(koopa.tex, koopa.x, koopa.y, &koopa.koopaRect, 0);
+
 		//Update Text
 		char buffer[6];
 		sprintf_s(buffer, "%d", angle);
@@ -177,6 +220,8 @@ int main(int argc, char* argv[])
 		// Draw canon
 		rotAngle = 0;
 		Blit(canon.tex, canon.x, canon.y, &canon.rect, rotAngle);
+		//Draw stand
+		Blit(canon.tex, canon.x , canon.y + 80, &canon.standRect, rotAngle);
 
 		//Draw Text
 		Blit(textTexture, 100, 100,NULL,0);

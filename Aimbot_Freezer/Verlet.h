@@ -15,4 +15,6 @@ struct particle
 	Vec3d acc;
 };
 
+
+
 void Verlet(particle* prev_part, particle* output_part, Vec3d force, float dt);
