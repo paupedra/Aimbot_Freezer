@@ -12,6 +12,7 @@
 #pragma comment(linker,"/SUBSYSTEM:WINDOWS")
 
 #include <stdlib.h>
+#include <stdio.h>
 #include "sdl_functions.h"
 #include "j1PerfTimer.h"
 #include "j1Timer.h"
@@ -49,15 +50,14 @@ int main(int argc, char* argv[])
 	int				frame_rate = 60;
 	float			dt = 0;
 	SDL_Color textColor = { (255),(255),(255) };
-
+	int angle = 45;
 	//Load Font
-	_TTF_Font* font = TTF_OpenFont("Assets/Fonts/Minecraftia-Regular.ttf", 12);
+	_TTF_Font* font = TTF_OpenFont("Assets/Fonts/Minecraftia-Regular.ttf", 20);
 
 	// Load a texture
 	SDL_Texture *texScreen = LoadTexture("Assets/Screens/spacee.png");
 	SDL_Texture *texBall = LoadTexture("Assets/Sprites/kirby_ball.png");
-	SDL_Texture *textTexture = Print("hola",textColor,font);
-
+	SDL_Texture *textTexture = Print("45",textColor,font);
 
 	Ball ball = {
 		{0, 0, 200, 200}, // SDL_Rect
@@ -105,7 +105,7 @@ int main(int argc, char* argv[])
 		force.z = 0;
 
 		const Uint8* keys = SDL_GetKeyboardState(NULL);
-		if (keys[SDL_SCANCODE_UP])
+		if (keys[SDL_SCANCODE_O])
 		{
 			ball_p.pos.x = 450; //Starting Position
 			ball_p.pos.y = 200;
@@ -118,6 +118,15 @@ int main(int argc, char* argv[])
 		if (keys[SDL_SCANCODE_LEFT])
 		{
 			force.x -= 500.0f;
+		}
+
+		if (keys[SDL_SCANCODE_UP] == KEY_DOWN)
+		{
+			angle += 1;
+		}
+		if (keys[SDL_SCANCODE_DOWN] == 0)
+		{
+			angle -= 1;
 		}
 
 		//Verlet
@@ -147,7 +156,13 @@ int main(int argc, char* argv[])
 		}
 
 		/* Draw the ball */
-		Blit(ball.tex, ball_p.pos.x, ball_p.pos.y, &ball.rect,120);
+		Blit(ball.tex, ball_p.pos.x, ball_p.pos.y, &ball.rect,0);
+
+		//Update Text
+		char buffer[6];
+		sprintf_s(buffer, "%d", angle);
+		SDL_DestroyTexture(textTexture);
+		textTexture = Print(buffer, textColor, font);
 
 		//Draw Text
 		Blit(textTexture, 100, 100,NULL,0);
