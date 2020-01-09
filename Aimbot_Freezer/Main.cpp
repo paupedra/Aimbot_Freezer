@@ -30,6 +30,14 @@ struct Ball
 	float vx, vy;     // velocity in the world
 };
 
+struct Canon
+{
+	SDL_Rect rect;    // position in the texture
+	SDL_Texture* tex; // texture
+	float x, y;       // position in the world
+	float angle;	// rotation angle
+};
+
 int main(int argc, char* argv[])
 {
 	// Initialize SDL
@@ -50,14 +58,24 @@ int main(int argc, char* argv[])
 	float			dt = 0;
 	SDL_Color textColor = { (255),(255),(255) };
 
+
+
 	//Load Font
 	_TTF_Font* font = TTF_OpenFont("Assets/Fonts/Minecraftia-Regular.ttf", 12);
 
 	// Load a texture
 	SDL_Texture *texScreen = LoadTexture("Assets/Screens/spacee.png");
 	SDL_Texture *texBall = LoadTexture("Assets/Sprites/kirby_ball.png");
+	SDL_Texture* texCanon = LoadTexture("Assets/Sprites/Canon.png");
 	SDL_Texture *textTexture = Print("hola",textColor,font);
 
+	float rotAngle = 0;
+	Canon canon = {
+		{0,0,512,512},
+		texCanon,
+		20, 150,
+		rotAngle
+	};
 
 	Ball ball = {
 		{0, 0, 200, 200}, // SDL_Rect
@@ -148,6 +166,10 @@ int main(int argc, char* argv[])
 
 		/* Draw the ball */
 		Blit(ball.tex, ball_p.pos.x, ball_p.pos.y, &ball.rect,0);
+
+		// Draw canon
+		rotAngle = 0;
+		Blit(canon.tex, canon.x, canon.y, &canon.rect, rotAngle);
 
 		//Draw Text
 
