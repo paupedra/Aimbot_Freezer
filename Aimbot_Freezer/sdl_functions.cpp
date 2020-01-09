@@ -14,8 +14,8 @@
 
 // Configuration
 #define SCREEN_SIZE 1
-#define SCREEN_WIDTH 1280
-#define SCREEN_HEIGHT 960
+#define SCREEN_WIDTH 1650
+#define SCREEN_HEIGHT 1050
 #define WIN_FULLSCREEN 0
 #define WIN_FULLSCREEN_DESKTOP 0
 #define WIN_BORDERLESS 0

@@ -1,12 +1,3 @@
-/**********************************************************************
- *
- * IMPORTANT NOTE:
- * Make sure you compile the project in x86 architecture.
- * If you see x64 in the combo box above, change it to x86.
- * This is because the libraries we are using (SDL, libpng, etc) are
- * compiled in x86 architecture, so we have to adapt.
- *
- **********************************************************************/
 
 #pragma comment(linker,"/ENTRY:mainCRTStartup")
 #pragma comment(linker,"/SUBSYSTEM:WINDOWS")
@@ -64,7 +55,7 @@ int main(int argc, char* argv[])
 	_TTF_Font* font = TTF_OpenFont("Assets/Fonts/Minecraftia-Regular.ttf", 12);
 
 	// Load a texture
-	SDL_Texture *texScreen = LoadTexture("Assets/Screens/spacee.png");
+	SDL_Texture *texScreen = LoadTexture("Assets/Screens/Background.jpg");
 	SDL_Texture *texBall = LoadTexture("Assets/Sprites/kirby_ball.png");
 	SDL_Texture* texCanon = LoadTexture("Assets/Sprites/Canon.png");
 	SDL_Texture *textTexture = Print("hola",textColor,font);
@@ -73,7 +64,7 @@ int main(int argc, char* argv[])
 	Canon canon = {
 		{0,0,512,512},
 		texCanon,
-		20, 150,
+		10, 550,
 		rotAngle
 	};
 
@@ -113,9 +104,9 @@ int main(int argc, char* argv[])
 		SDL_Rect rect;
 		rect.x = 0;
 		rect.y = 0;
-		rect.w = 1920;
-		rect.h = 1080;
-		Blit(texScreen, -500, 0, &rect,0);
+		rect.w = 1680;
+		rect.h = 1050;
+		Blit(texScreen, 0, 0, &rect,0);
 
 		// Apply forces
 		force.x = 0;
