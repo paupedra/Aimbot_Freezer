@@ -33,7 +33,7 @@ void UnloadTexture(SDL_Texture *texture);
 
 //void GetTextureSize(const SDL_Texture* texture, unsigned int& width, unsigned int& height);
 
-void Blit(SDL_Texture* texture, int x, int y, SDL_Rect* section);
+void Blit(SDL_Texture* texture, int x, int y, SDL_Rect* section, float angle);
 
 void DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 

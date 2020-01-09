@@ -272,11 +272,13 @@ void UnloadTexture(SDL_Texture * texture)
 }
 
 // Blit to screen
-void Blit(SDL_Texture* texture, int x, int y, SDL_Rect* section)
+void Blit(SDL_Texture* texture, int x, int y, SDL_Rect* section, float angle)
 {
 	SDL_Rect rect;
 	rect.x = x * SCREEN_SIZE;
 	rect.y = y * SCREEN_SIZE;
+
+
 
 	if (section != NULL)
 	{
@@ -291,10 +293,20 @@ void Blit(SDL_Texture* texture, int x, int y, SDL_Rect* section)
 	rect.w *= SCREEN_SIZE;
 	rect.h *= SCREEN_SIZE;
 
+	SDL_Point rotationPoint;
+	rotationPoint.x = rect.x + rect.w;
+	rotationPoint.y = rect.y;
+
 	if (SDL_RenderCopy(renderer, texture, section, &rect) != 0)
 	{
 		LOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
 	}
+
+
+	//if (SDL_RenderCopyEx(renderer, texture, section, &rect, angle, &rotationPoint, SDL_FLIP_NONE) != 0)
+	//{
+	//	LOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
+	//}
 }
 
 void DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
