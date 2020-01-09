@@ -26,10 +26,17 @@ void CleanUp();
 
 struct SDL_Renderer;
 struct SDL_Texture;
+struct _TTF_Font;
 
 SDL_Texture *LoadTexture(const char *filename);
 
 void UnloadTexture(SDL_Texture *texture);
+
+SDL_Texture* Print(const char* text, SDL_Color color, _TTF_Font* font);
+
+bool CalcSize(const char* text, int& width, int& height, _TTF_Font* font);
+
+void UpdateText(const char* text, SDL_Texture* texture, SDL_Color* color, _TTF_Font* font);
 
 //void GetTextureSize(const SDL_Texture* texture, unsigned int& width, unsigned int& height);
 
