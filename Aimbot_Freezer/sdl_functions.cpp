@@ -331,3 +331,45 @@ int SpaceWasPressed()
 	else
 		return 0;
 }
+
+// Print text using font
+SDL_Texture* Print(const char* text, SDL_Color color, _TTF_Font* font)
+{
+	SDL_Texture* ret = NULL;
+	SDL_Surface* surface = TTF_RenderText_Blended(font, text, color);
+
+	if (surface == NULL)
+	{
+		LOG("Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError());
+	}
+	else
+	{
+		ret = SDL_CreateTextureFromSurface(renderer, surface);
+		SDL_FreeSurface(surface);
+	}
+
+	return ret;
+}
+
+// calculate size of a text
+bool CalcSize(const char* text, int& width, int& height, _TTF_Font* font) 
+{
+	bool ret = false;
+
+	if (TTF_SizeText(font, text, &width, &height) != 0)
+	{
+		LOG("Unable to calc size of text surface! SDL_ttf Error: %s\n", TTF_GetError());
+	}
+	else
+	{
+		ret = true;
+	}
+	return ret;
+}
+
+void UpdateText(const char* text,SDL_Texture* texture,SDL_Color* color,_TTF_Font* font)
+{
+	SDL_DestroyTexture(texture);
+
+	texture = Print(text, *color, font);
+}

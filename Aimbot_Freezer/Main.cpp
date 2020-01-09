@@ -20,6 +20,7 @@
 
 #include "SDL/include/SDL.h"
 #include "SDL_image/include/SDL_image.h"
+#include "SDL_ttf\include\SDL_ttf.h"
 
 struct Ball
 {
@@ -47,10 +48,16 @@ int main(int argc, char* argv[])
 	int				prev_last_sec_frame_count = 0;
 	int				frame_rate = 60;
 	float			dt = 0;
+	SDL_Color textColor = { (255),(255),(255) };
+
+	//Load Font
+	_TTF_Font* font = TTF_OpenFont("Assets/Fonts/Minecraftia-Regular.ttf", 12);
 
 	// Load a texture
 	SDL_Texture *texScreen = LoadTexture("Assets/Screens/spacee.png");
 	SDL_Texture *texBall = LoadTexture("Assets/Sprites/kirby_ball.png");
+	SDL_Texture *textTexture = Print("hola",textColor,font);
+
 
 	Ball ball = {
 		{0, 0, 200, 200}, // SDL_Rect
@@ -141,6 +148,10 @@ int main(int argc, char* argv[])
 
 		/* Draw the ball */
 		Blit(ball.tex, ball_p.pos.x, ball_p.pos.y, &ball.rect);
+
+		//Draw Text
+
+		Blit(textTexture, 100, 100,NULL);
 
 		PostUpdate(); // Presents the screen
 
