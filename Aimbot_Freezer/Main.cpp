@@ -8,26 +8,12 @@
 #include "j1Timer.h"
 #include "Log.h"
 #include "Verlet.h"
+#include "Aimbot.h"
 
 #include "SDL/include/SDL.h"
 #include "SDL_image/include/SDL_image.h"
 #include "SDL_ttf\include\SDL_ttf.h"
 
-struct Ball
-{
-	SDL_Rect rect;    // position in the texture
-	SDL_Texture *tex; // texture
-	float x, y;       // position in the world
-	float vx, vy;     // velocity in the world
-};
-
-struct Canon
-{
-	SDL_Rect rect;    // position in the texture
-	SDL_Texture* tex; // texture
-	float x, y;       // position in the world
-	float angle;	// rotation angle
-};
 
 int main(int argc, char* argv[])
 {
@@ -48,7 +34,6 @@ int main(int argc, char* argv[])
 	int				frame_rate = 60;
 	float			dt = 0;
 	SDL_Color textColor = { (255),(255),(255) };
-
 
 
 	//Load Font
@@ -155,11 +140,12 @@ int main(int argc, char* argv[])
 			ball_p.pos.x = 0;
 		}
 
+		
+
 		/* Draw the ball */
 		Blit(ball.tex, ball_p.pos.x, ball_p.pos.y, &ball.rect,120);
 
 		// Draw canon
-		rotAngle = 0;
 		Blit(canon.tex, canon.x, canon.y, &canon.rect, rotAngle);
 
 		//Draw Text
@@ -184,6 +170,8 @@ int main(int argc, char* argv[])
 			}
 		}
 	}
+
+
 
 	// Unload textures
 	UnloadTexture(texBall);

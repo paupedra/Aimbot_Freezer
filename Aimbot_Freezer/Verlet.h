@@ -1,3 +1,6 @@
+#include "SDL/include/SDL.h"
+#include "SDL/include/SDL_rect.h"
+
 struct Vec3d
 {
 	Vec3d() { x = 0; y = 0; z = 0; };
@@ -14,5 +17,22 @@ struct particle
 	Vec3d speed;
 	Vec3d acc;
 };
+
+struct Ball
+{
+	SDL_Rect rect;    // position in the texture
+	SDL_Texture* tex; // texture
+	float x, y;       // position in the world
+	float vx, vy;     // velocity in the world
+};
+
+struct Canon
+{
+	SDL_Rect rect;    // position in the texture
+	SDL_Texture* tex; // texture
+	float x, y;       // position in the world
+	float angle;	// rotation angle
+};
+
 
 void Verlet(particle* prev_part, particle* output_part, Vec3d force, float dt);
