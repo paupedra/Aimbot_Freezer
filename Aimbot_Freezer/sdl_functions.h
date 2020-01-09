@@ -19,10 +19,17 @@ void PostUpdate();
 /* Call it once at the end of main() */
 void CleanUp();
 
-
 // Functions to draw stuff on screen ////////////////////////////////////////////
 
 #include "SDL/include/SDL_rect.h"
+
+enum KEY_STATE
+{
+	KEY_IDLE = 0,
+	KEY_DOWN,
+	KEY_REPEAT,
+	KEY_UP
+};
 
 struct SDL_Renderer;
 struct SDL_Texture;
@@ -45,5 +52,3 @@ void Blit(SDL_Texture* texture, int x, int y, SDL_Rect* section, float angle);
 void DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
 int SpaceWasPressed();
-
-//_TTF_Font*	font;

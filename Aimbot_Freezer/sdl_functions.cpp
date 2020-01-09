@@ -33,13 +33,6 @@ SDL_Renderer* renderer = nullptr;
 
 #define MAX_KEYS 300
 
-enum KEY_STATE
-{
-	KEY_IDLE = 0,
-	KEY_DOWN,
-	KEY_REPEAT,
-	KEY_UP
-};
 
 // Input variables
 KEY_STATE keyboard[MAX_KEYS];
@@ -174,6 +167,7 @@ void PreUpdate()
 
 	if (keyboard[SDL_SCANCODE_ESCAPE])
 		exitApplication = 1;
+	
 
 }
 
