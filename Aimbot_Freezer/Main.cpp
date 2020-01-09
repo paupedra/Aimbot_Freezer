@@ -97,7 +97,7 @@ int main(int argc, char* argv[])
 		rect.y = 0;
 		rect.w = 1920;
 		rect.h = 1080;
-		Blit(texScreen, -500, 0, &rect);
+		Blit(texScreen, -500, 0, &rect,0);
 
 		// Apply forces
 		force.x = 0;
@@ -147,11 +147,11 @@ int main(int argc, char* argv[])
 		}
 
 		/* Draw the ball */
-		Blit(ball.tex, ball_p.pos.x, ball_p.pos.y, &ball.rect);
+		Blit(ball.tex, ball_p.pos.x, ball_p.pos.y, &ball.rect,0);
 
 		//Draw Text
 
-		Blit(textTexture, 100, 100,NULL);
+		Blit(textTexture, 100, 100,NULL,0);
 
 		PostUpdate(); // Presents the screen
 
