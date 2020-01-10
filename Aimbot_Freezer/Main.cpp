@@ -62,15 +62,18 @@ int main(int argc, char* argv[])
 
 	Ball ball = {
 		{0, 0, 200, 200}, // SDL_Rect
+		{270,100,200,200},// Collider
 		texBall,          // SDL_Texture
 		270, 100,         // Initial position in the screen
-		0, 0              // Initial velocity
+		0, 0,              // Initial velocity
+		false
 	};
 
 	Enemy koopa = {
 		{0,0,160,230},
+		{1000,10,260,230},
 		texKoopa,
-		10,10
+		1000,10
 	};
 
 	//Ball particle
@@ -160,8 +163,18 @@ int main(int argc, char* argv[])
 		{
 			koopa.y += 500 * dt;
 		}
+
+		//Enable/Disable ball manually
+		if (keys[SDL_SCANCODE_E] == KEY_DOWN)
+		{
+			ball.enabled = !ball.enabled;
+		}
+
 		//Verlet
-		Verlet(&ball_p, &ball_p, force, dt);
+		if (ball.enabled)
+		{
+			Verlet(&ball_p, &ball_p, force, dt);
+		}
 
 		if (ball_p.pos.y > 740)
 		{
@@ -189,8 +202,10 @@ int main(int argc, char* argv[])
 		
 
 		/* Draw the ball */
-		Blit(ball.tex, ball_p.pos.x, ball_p.pos.y, &ball.rect,0);
-
+		if (ball.enabled)
+		{
+			Blit(ball.tex, ball_p.pos.x, ball_p.pos.y, &ball.rect, 0);
+		}
 		//Draw Koopa
 		Blit(koopa.tex, koopa.x, koopa.y, &koopa.koopaRect, 0);
 

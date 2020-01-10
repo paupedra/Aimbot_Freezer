@@ -21,9 +21,11 @@ struct particle
 struct Ball
 {
 	SDL_Rect rect;    // position in the texture
+	SDL_Rect ballCollider;
 	SDL_Texture *tex; // texture
 	float x, y;       // position in the world
 	float vx, vy;     // velocity in the world
+	bool enabled;
 };
 
 struct Canon
@@ -38,6 +40,7 @@ struct Canon
 struct Enemy
 {
 	SDL_Rect koopaRect;    // cannon position in the texture
+	SDL_Rect koopaCollider;
 	SDL_Texture* tex; // texture
 	float x, y;       // position in the world
 };
