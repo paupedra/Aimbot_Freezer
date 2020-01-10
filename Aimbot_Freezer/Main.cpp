@@ -54,6 +54,8 @@ int main(int argc, char* argv[])
 	int angle = 45;
 	j1Timer		spaceTimer;
 	j1Timer		ETimer;
+	Vec3d wind;
+	int finalSpeed = 0;
 
 	//Load Font
 	_TTF_Font* font = TTF_OpenFont("Assets/Fonts/Minecraftia-Regular.ttf", 40);
@@ -72,15 +74,12 @@ int main(int argc, char* argv[])
 	SDL_Texture *windNumTex = Print("0", textColor, font);
 	SDL_Texture *windTex = Print("Wind:", textColor, font);
 
-
-	float rotAngle = 0;
-
 	Cannon cannon = {
 		{0,0,128,128},
 		{0,128,128,192},
 		texCanon,
 		10, 665,
-		rotAngle
+		0
 	};
 
 	Ball ball = {
@@ -209,15 +208,32 @@ int main(int argc, char* argv[])
 		{
 			koopa.y += 500 * dt;
 		}
+
+		if (keys[SDL_SCANCODE_T] == KEY_DOWN)
+		{
+			if (wind.x <= 99)
+			{
+				wind.x++;
+			}
+		}
+		if (keys[SDL_SCANCODE_R] == KEY_DOWN)
+		{
+			if (wind.x >= 1)
+			{
+				wind.x--;
+			}
+			
+		}
 		
 		if (keys[SDL_SCANCODE_SPACE] == KEY_DOWN && spaceTimer.ReadSec() > 1)
 		{
 			ball.enabled = true;
 			ball_p.pos.x = cannon.x;
 			ball_p.pos.y = cannon.y;
-			ball_p.speed = *Aimbot(cannon, koopa, ball, dt,windForce);
+			ball_p.speed = *Aimbot(cannon, koopa, ball, dt,wind);
 			double pi = 180 / 3.14159265;
 			angle = -atan(ball_p.speed.y/ ball_p.speed.x) * pi;
+			finalSpeed = sqrt((ball_p.speed.y*ball_p.speed.y) + (ball_p.speed.x*ball_p.speed.x));
 			spaceTimer.Start();
 		}
 
@@ -235,7 +251,7 @@ int main(int argc, char* argv[])
 		//Verlet
 		if (ball.enabled)
 		{
-			Verlet(&ball_p, &ball_p, windForce, dt);
+			Verlet(&ball_p, &ball_p, wind, dt);
 			ball.ballCollider.x = ball.x;
 			ball.ballCollider.y = ball.y;
 		}
@@ -254,7 +270,13 @@ int main(int argc, char* argv[])
 		SDL_DestroyTexture(angleNumTex);
 		angleNumTex = Print(buffer, textColor, font);
 
+		sprintf_s(buffer, "%d", finalSpeed);
+		SDL_DestroyTexture(speedNumTex);
+		speedNumTex = Print(buffer, textColor, font);
 
+		sprintf_s(buffer, "%.0f", -wind.x);
+		SDL_DestroyTexture(windNumTex);
+		windNumTex = Print(buffer, textColor, font);
 
 
 		// Draw canon
@@ -266,10 +288,9 @@ int main(int argc, char* argv[])
 		Blit(angleNumTex, 100, 100,NULL,0);
 		Blit(angleTex, 80, 50, NULL, 0);
 		Blit(speedTex, 80, 200, NULL, 0);
-
-		
-
-
+		Blit(speedNumTex, 100, 250, NULL, 0);
+		Blit(windTex, 80, 300, NULL, 0);
+		Blit(windNumTex, 100, 350, NULL, 0);
 
 		PostUpdate(); // Presents the screen
 

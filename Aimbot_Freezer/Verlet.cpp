@@ -24,7 +24,7 @@ void Verlet(particle* prev_part, particle* output_part, Vec3d force, float dt)
 	//new_acc.y = (force.y + drag_force.y) / prev_part->mass;
 	//new_acc.z = (force.z + drag_force.z) / prev_part->mass;
 
-	output_part->acc.x = prev_part->acc.x;
+	output_part->acc.x = -force.x * 10;
 	output_part->acc.y = prev_part->acc.y;
 	output_part->acc.z = prev_part->acc.z;
 
