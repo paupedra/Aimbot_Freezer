@@ -4,6 +4,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+
 #include "sdl_functions.h"
 
 #include "p2List.h"
@@ -13,13 +14,9 @@
 #include "Verlet.h"
 #include "Aimbot.h"
 
-
 #include "SDL/include/SDL.h"
 #include "SDL_image/include/SDL_image.h"
 #include "SDL_ttf\include\SDL_ttf.h"
-
-
-
 
 int main(int argc, char* argv[])
 {
@@ -41,6 +38,7 @@ int main(int argc, char* argv[])
 	float			dt = 0;
 	SDL_Color textColor = { (255),(255),(255) };
 	int angle = 45;
+	j1PerfTimer		spaceTimer;
 
 
 	//Load Font
@@ -102,7 +100,7 @@ int main(int argc, char* argv[])
 		dt = frame_time.ReadSec();
 		frame_time.Start(); //Restart the single frame time
 
-		const Uint8* keys = PreUpdate(); // Updates events
+		PreUpdate(); // Updates events
 
 		/* Draw the screen */
 		SDL_Rect rect;
@@ -117,7 +115,7 @@ int main(int argc, char* argv[])
 		force.y = 980.0f;
 		force.z = 0;
 
-		//const Uint8* keys = SDL_GetKeyboardState(NULL);
+		const Uint8* keys = SDL_GetKeyboardState(NULL);
 
 		if (keys[SDL_SCANCODE_O])
 		{
@@ -168,9 +166,10 @@ int main(int argc, char* argv[])
 			koopa.y += 500 * dt;
 		}
 		
-		if (keys[SDL_SCANCODE_SPACE] == KEY_DOWN)
+		if (keys[SDL_SCANCODE_SPACE] == KEY_DOWN && spaceTimer.ReadMs() > 1000)
 		{
 			Aimbot(cannon,koopa,ball,dt);
+			spaceTimer.Start();
 		}
 
 		//Update koopa collider
@@ -238,12 +237,16 @@ int main(int argc, char* argv[])
 		//Draw Text
 		Blit(textTexture, 100, 100,NULL,0);
 
+		DrawQuad(ball.ballCollider, 255, 255, 0,100);
+
+		DrawQuad(koopa.koopaCollider, 255, 255, 0,100);
+
 		PostUpdate(); // Presents the screen
 
 		//Frame Calculation and Delay to achieve desired framerate
 		if (last_sec_frame_time.Read() > 1000)
 		{
-			LOG("%d", last_sec_frame_count);
+			//LOG("%d", last_sec_frame_count);
 			last_sec_frame_time.Start();
 			last_sec_frame_count = 0;
 		}

@@ -39,6 +39,6 @@ void Verlet(particle* prev_part, particle* output_part, Vec3d force, float dt)
 	output_part->pos.x = prev_part->pos.x + output_part->speed.x * dt + 0.5f * new_acc.x * dt * dt; // x = xi + v*t + 1/2*a*t*t
 	output_part->pos.y = prev_part->pos.y + output_part->speed.y * dt + 0.5f * new_acc.y * dt * dt;
 	output_part->pos.z = prev_part->pos.z + output_part->speed.z * dt + 0.5f * new_acc.z * dt * dt;
-	LOG("speed : %f ", prev_part->speed.y);
+	//LOG("speed : %f ", prev_part->speed.y);
 
 }

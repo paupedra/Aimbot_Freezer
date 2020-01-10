@@ -2,6 +2,11 @@
 #include "Verlet.h"
 #include "SDL/include/SDL.h"
 #include <stdlib.h>
+#include "Log.h"
+#include <math.h>
+
+#define PI 3.14159265
+
 
 bool Collided(Vec3d* ball_pos, Vec3d* target_pos)
 {
@@ -9,8 +14,9 @@ bool Collided(Vec3d* ball_pos, Vec3d* target_pos)
 		return true;
 }
 
-void Aimbot(Cannon cannon, Enemy koopa, Ball ball, float dt)
+Vec3d* Aimbot(Cannon cannon, Enemy koopa, Ball ball, float dt)
 {
+	Vec3d* ret = (0,0,0);
 
 	Vec3d force;
 	force.x = -10.0f;
@@ -24,40 +30,60 @@ void Aimbot(Cannon cannon, Enemy koopa, Ball ball, float dt)
 	ballPos.speed.y = 0.0f;
 	ballPos.mass = 0.5f;
 
-	
+	int koopaCenter_x = koopa.x + koopa.koopaRect.w / 2;
+	int koopaCenter_y = koopa.y + koopa.koopaRect.h / 2;
 
-	bool collided;
-
+	int ballCenter_x = cannon.x + ball.rect.w /2;
+	int ballCenter_y = cannon.y + ball.rect.h /2;
 
 	//MonteCarlo
 	int i = 0;
-
+	int k = 0;
 	while(i<50) // Try at most 
 	{
-		collided = false;
-		Trajectory.clear();
+		//collided = false;
+		//Trajectory.clear();
+		//double angle = rand() % 90;
+		//double velocity = rand() % 500;
+		//double velocity_x = sin(angle*(PI / 180)) * velocity;
+		//double velocity_y = cos(angle*(PI / 180)) * velocity;
 
-		int angle = rand() % 90;
-		
-		for (int j = 0; i < 300; j++)
+		ballPos.pos.x = cannon.x;
+		ballPos.pos.y = cannon.y;
+
+
+
+		//ballPos.speed.x = rand() % 300 + 100;
+		//ballPos.speed.y = rand() % 300 + 100;
+
+		/*ballPos.speed.x = 100;
+		ballPos.speed.y = 100;*/
+
+		for (int j = 0; j < 300; j++)
 		{
-			
-			Trajectory.add(ballPos.pos);
+			//Trajectory.add(ballPos.pos);
 			
 			Verlet(&ballPos, &ballPos, force, dt);
+			
+			//Update Koopa center
+			koopaCenter_x = koopa.x + koopa.koopaRect.w / 2;
+			koopaCenter_y = koopa.y + koopa.koopaRect.h / 2;
 
+			ballCenter_x = cannon.x + ball.rect.w / 2;
+			ballCenter_y = cannon.y + ball.rect.h / 2;
 
-			if ((ball.ballCollider.x + ball.ballCollider.w > koopa.koopaCollider.x) && (ball.ballCollider.x < koopa.koopaCollider.x + koopa.koopaCollider.w) &&
-				(ball.ballCollider.y + ball.ballCollider.h > koopa.koopaCollider.y) && (ball.ballCollider.y < koopa.koopaCollider.y + koopa.koopaCollider.h))
+			int dx = ballCenter_x - koopaCenter_x;
+			int dy = ballCenter_y - koopaCenter_y;
+			if( sqrt((dx*dx)+(dy*dy)) <= 20)
 			{
 
-				collided = true;
-				Trajectory.add(ballPos.pos);
-				return;
-
+				ret = (ballPos.speed.x, ballPos.speed.y,0);
+				return ret;
+				LOG("Hit!");
 			}
-			
+			k = 0;
 		}
 		i++;
 	}
+	return ret;
 }

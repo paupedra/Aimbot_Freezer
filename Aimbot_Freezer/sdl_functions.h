@@ -31,6 +31,8 @@ enum KEY_STATE
 	KEY_UP
 };
 
+//const Uint8* keys;
+
 struct SDL_Renderer;
 struct SDL_Texture;
 struct _TTF_Font;

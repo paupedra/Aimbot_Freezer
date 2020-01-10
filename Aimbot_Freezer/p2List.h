@@ -1,6 +1,16 @@
 #ifndef __p2List_H__
 #define __p2List_H__
 
+// Deletes a buffer
+#define RELEASE( x ) \
+    {                        \
+    if( x != NULL )        \
+	    {                      \
+      delete x;            \
+	  x = NULL;              \
+	    }                      \
+    }
+
 typedef unsigned int uint;
 
 /**
