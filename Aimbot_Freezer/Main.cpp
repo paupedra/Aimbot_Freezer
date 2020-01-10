@@ -18,6 +18,20 @@
 #include "SDL_image/include/SDL_image.h"
 #include "SDL_ttf\include\SDL_ttf.h"
 
+
+enum KEY_STATE
+{
+	KEY_IDLE = 0,
+	KEY_DOWN,
+	KEY_REPEAT,
+	KEY_UP
+};
+
+
+#define MAX_KEYS 300
+// Input variables
+KEY_STATE keyboard[MAX_KEYS];
+
 int main(int argc, char* argv[])
 {
 	// Initialize SDL
@@ -38,18 +52,26 @@ int main(int argc, char* argv[])
 	float			dt = 0;
 	SDL_Color textColor = { (255),(255),(255) };
 	int angle = 45;
-	j1PerfTimer		spaceTimer;
-
+	j1Timer		spaceTimer;
+	j1Timer		ETimer;
 
 	//Load Font
-	_TTF_Font* font = TTF_OpenFont("Assets/Fonts/Minecraftia-Regular.ttf", 20);
+	_TTF_Font* font = TTF_OpenFont("Assets/Fonts/Minecraftia-Regular.ttf", 40);
 
 	// Load a texture
 	SDL_Texture *texScreen = LoadTexture("Assets/Screens/Background.jpg");
 	SDL_Texture *texBall = LoadTexture("Assets/Sprites/kirby_ball.png");
-	SDL_Texture *textTexture = Print("45",textColor,font);
 	SDL_Texture* texCanon = LoadTexture("Assets/Sprites/Cannon.png");
 	SDL_Texture* texKoopa = LoadTexture("Assets/Sprites/Koopa.png");
+
+	//Load Texts Textures
+	SDL_Texture *angleNumTex = Print("45", textColor, font);
+	SDL_Texture *angleTex = Print("Angle:", textColor, font);
+	SDL_Texture *speedNumTex = Print("400", textColor, font);
+	SDL_Texture *speedTex = Print("Speed:", textColor, font);
+	SDL_Texture *windNumTex = Print("0", textColor, font);
+	SDL_Texture *windTex = Print("Wind:", textColor, font);
+
 
 	float rotAngle = 0;
 
@@ -62,17 +84,17 @@ int main(int argc, char* argv[])
 	};
 
 	Ball ball = {
-		{0, 0, 200, 200}, // SDL_Rect
+		{0, 0, 100, 100}, // SDL_Rect
 		{270,100,200,200},// Collider
 		texBall,          // SDL_Texture
 		270, 100,         // Initial position in the screen
-		0, 0,              // Initial velocity
+		Vec3d(),              // Initial velocity
 		false
 	};
 
 	Enemy koopa = {
 		{0,0,160,230},
-		{1000,10,260,230},
+		{1000,10,160,230},
 		texKoopa,
 		1000,10
 	};
@@ -81,7 +103,7 @@ int main(int argc, char* argv[])
 	particle ball_p;
 	ball_p.pos.x = 450; //Starting Position
 	ball_p.pos.y = 200;
-	ball_p.acc.y = 0.0f; //Gravity
+	ball_p.acc.y = 980.0f; //Gravity
 	ball_p.speed.x = 0.0f; //Arbitrary starting speed
 	ball_p.speed.y = 100.0f;
 	ball_p.mass = 0.5f;
@@ -111,11 +133,33 @@ int main(int argc, char* argv[])
 		Blit(texScreen, 0, 0, &rect,0);
 
 		// Apply forces
-		force.x = 0;
-		force.y = 980.0f;
-		force.z = 0;
+		Vec3d windForce;
+		windForce.x = 0.0f;
+		windForce.y = 9.0f; // gravity
+		windForce.z = 0;
 
 		const Uint8* keys = SDL_GetKeyboardState(NULL);
+
+		for (int i = 0; i < MAX_KEYS; ++i)
+		{
+			if (keys[i] == 1)
+			{
+				if (keyboard[i] == KEY_IDLE)
+					keyboard[i] = KEY_DOWN;
+				else
+					keyboard[i] = KEY_REPEAT;
+			}
+			else
+			{
+				if (keyboard[i] == KEY_REPEAT || keyboard[i] == KEY_DOWN)
+					keyboard[i] = KEY_UP;
+				else
+					keyboard[i] = KEY_IDLE;
+			}
+		}
+		if (keyboard[SDL_SCANCODE_ESCAPE])
+			exitApplication = 1;
+
 
 		if (keys[SDL_SCANCODE_O])
 		{
@@ -166,9 +210,14 @@ int main(int argc, char* argv[])
 			koopa.y += 500 * dt;
 		}
 		
-		if (keys[SDL_SCANCODE_SPACE] == KEY_DOWN && spaceTimer.ReadMs() > 1000)
+		if (keys[SDL_SCANCODE_SPACE] == KEY_DOWN && spaceTimer.ReadSec() > 1)
 		{
-			Aimbot(cannon,koopa,ball,dt);
+			ball.enabled = true;
+			ball_p.pos.x = cannon.x;
+			ball_p.pos.y = cannon.y;
+			ball_p.speed = *Aimbot(cannon, koopa, ball, dt,windForce);
+			double pi = 180 / 3.14159265;
+			angle = -atan(ball_p.speed.y/ ball_p.speed.x) * pi;
 			spaceTimer.Start();
 		}
 
@@ -177,43 +226,19 @@ int main(int argc, char* argv[])
 		koopa.koopaCollider.y = koopa.y;
 
 		//Enable/Disable ball manually
-		if (keys[SDL_SCANCODE_E] == KEY_DOWN)
+		if (keys[SDL_SCANCODE_E] == KEY_DOWN && ETimer.ReadSec() > 1)
 		{
 			ball.enabled = !ball.enabled;
+			ETimer.Start();
 		}
 
 		//Verlet
 		if (ball.enabled)
 		{
-			Verlet(&ball_p, &ball_p, force, dt);
+			Verlet(&ball_p, &ball_p, windForce, dt);
 			ball.ballCollider.x = ball.x;
 			ball.ballCollider.y = ball.y;
 		}
-		
-		/*if (ball_p.pos.y > 740)
-		{
-			ball_p.speed.y = -ball_p.speed.y * 0.8; //Floor Bounce
-			ball_p.pos.y = 740;
-
-			//ball_p.speed.x = ball_p.speed.x * 1; //Friction
-			
-			if(ball_p.speed.x < 1 || ball_p.speed.x > -1)
-			{
-				ball_p.speed.x = 0;
-			}
-		}
-		if (ball_p.pos.x > 1000) //Wall bounce
-		{
-			ball_p.speed.x = -ball_p.speed.x * 0.8;
-			ball_p.pos.x = 1000;
-		}
-		if (ball_p.pos.x < 0)
-		{
-			ball_p.speed.x = -ball_p.speed.x * 0.8;
-			ball_p.pos.x = 0;
-		}*/
-
-		
 
 		/* Draw the ball */
 		if (ball.enabled)
@@ -224,22 +249,27 @@ int main(int argc, char* argv[])
 		Blit(koopa.tex, koopa.x, koopa.y, &koopa.koopaRect, 0);
 
 		//Update Text
-		char buffer[6];
+		char buffer[32];
 		sprintf_s(buffer, "%d", angle);
-		SDL_DestroyTexture(textTexture);
-		textTexture = Print(buffer, textColor, font);
+		SDL_DestroyTexture(angleNumTex);
+		angleNumTex = Print(buffer, textColor, font);
+
+
+
 
 		// Draw canon
-		Blit(cannon.tex, cannon.x, cannon.y, &cannon.rect, rotAngle);
+		Blit(cannon.tex, cannon.x, cannon.y, &cannon.rect, -angle);
 		//Draw stand
 		Blit(cannon.tex, cannon.x , cannon.y + 80, &cannon.standRect, 0);
 
 		//Draw Text
-		Blit(textTexture, 100, 100,NULL,0);
+		Blit(angleNumTex, 100, 100,NULL,0);
+		Blit(angleTex, 80, 50, NULL, 0);
+		Blit(speedTex, 80, 200, NULL, 0);
 
-		DrawQuad(ball.ballCollider, 255, 255, 0,100);
+		
 
-		DrawQuad(koopa.koopaCollider, 255, 255, 0,100);
+
 
 		PostUpdate(); // Presents the screen
 

@@ -24,7 +24,7 @@ struct Ball
 	SDL_Rect ballCollider;
 	SDL_Texture *tex; // texture
 	float x, y;       // position in the world
-	float vx, vy;     // velocity in the world
+	Vec3d speed;     // velocity in the world
 	bool enabled;
 };
 

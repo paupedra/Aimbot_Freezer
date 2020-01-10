@@ -23,14 +23,6 @@ void CleanUp();
 
 #include "SDL/include/SDL_rect.h"
 
-enum KEY_STATE
-{
-	KEY_IDLE = 0,
-	KEY_DOWN,
-	KEY_REPEAT,
-	KEY_UP
-};
-
 //const Uint8* keys;
 
 struct SDL_Renderer;

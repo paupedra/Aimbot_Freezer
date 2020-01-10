@@ -31,11 +31,7 @@ SDL_Surface* screen_surface = nullptr;
 //The renderer
 SDL_Renderer* renderer = nullptr;
 
-#define MAX_KEYS 300
 
-
-// Input variables
-KEY_STATE keyboard[MAX_KEYS];
 
 // Textures
 #define MAX_TEXTURES 150
@@ -147,7 +143,7 @@ const Uint8* PreUpdate()
 
 	const Uint8* keys = SDL_GetKeyboardState(NULL);
 
-	for (int i = 0; i < MAX_KEYS; ++i)
+	/*for (int i = 0; i < MAX_KEYS; ++i)
 	{
 		if (keys[i] == 1)
 		{
@@ -163,10 +159,9 @@ const Uint8* PreUpdate()
 			else
 				keyboard[i] = KEY_IDLE;
 		}
-	}
+	}*/
 
-	if (keyboard[SDL_SCANCODE_ESCAPE])
-		exitApplication = 1;
+	
 	
 	return keys;
 }
@@ -312,10 +307,11 @@ void DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 
 int SpaceWasPressed()
 {
-	if (keyboard[SDL_SCANCODE_SPACE])
+	/*if (keyboard[SDL_SCANCODE_SPACE])
 		return 1;
 	else
-		return 0;
+		return 0;*/
+	return 0;
 }
 
 // Print text using font
