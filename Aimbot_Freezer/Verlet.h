@@ -28,7 +28,7 @@ struct Ball
 	bool enabled;
 };
 
-struct Canon
+struct Cannon
 {
 	SDL_Rect rect;    // cannon position in the texture
 	SDL_Rect standRect;    // stand

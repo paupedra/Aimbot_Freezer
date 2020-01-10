@@ -52,7 +52,7 @@ int main(int argc, char* argv[])
 
 	float rotAngle = 0;
 
-	Canon canon = {
+	Cannon cannon = {
 		{0,0,128,128},
 		{0,128,128,192},
 		texCanon,
@@ -99,10 +99,8 @@ int main(int argc, char* argv[])
 		dt = frame_time.ReadSec();
 		frame_time.Start(); //Restart the single frame time
 
-		PreUpdate(); // Updates events
+		const Uint8* keys = PreUpdate(); // Updates events
 
-		
-		
 		/* Draw the screen */
 		SDL_Rect rect;
 		rect.x = 0;
@@ -116,7 +114,7 @@ int main(int argc, char* argv[])
 		force.y = 980.0f;
 		force.z = 0;
 
-		const Uint8* keys = SDL_GetKeyboardState(NULL);
+		//const Uint8* keys = SDL_GetKeyboardState(NULL);
 
 		if (keys[SDL_SCANCODE_O])
 		{
@@ -135,19 +133,19 @@ int main(int argc, char* argv[])
 		//Move Cannon
 		if (keys[SDL_SCANCODE_D] == KEY_DOWN)
 		{
-			canon.x += 500 * dt;
+			cannon.x += 500 * dt;
 		}
 		if (keys[SDL_SCANCODE_A] == KEY_DOWN)
 		{
-			canon.x -= 500 * dt;
+			cannon.x -= 500 * dt;
 		}
 		if (keys[SDL_SCANCODE_W] == KEY_DOWN)
 		{
-			canon.y -= 500 * dt;
+			cannon.y -= 500 * dt;
 		}
 		if (keys[SDL_SCANCODE_S] == KEY_DOWN)
 		{
-			canon.y += 500 * dt;
+			cannon.y += 500 * dt;
 		}
 		//Move koopa
 		if (keys[SDL_SCANCODE_RIGHT] == KEY_DOWN)
@@ -166,6 +164,12 @@ int main(int argc, char* argv[])
 		{
 			koopa.y += 500 * dt;
 		}
+		
+		if (keys[SDL_SCANCODE_SPACE] == KEY_DOWN)
+		{
+			Aimbot(cannon,koopa,ball,dt);
+		}
+
 		//Update koopa collider
 		koopa.koopaCollider.x = koopa.x;
 		koopa.koopaCollider.y = koopa.y;
@@ -224,9 +228,9 @@ int main(int argc, char* argv[])
 		textTexture = Print(buffer, textColor, font);
 
 		// Draw canon
-		Blit(canon.tex, canon.x, canon.y, &canon.rect, rotAngle);
+		Blit(cannon.tex, cannon.x, cannon.y, &cannon.rect, rotAngle);
 		//Draw stand
-		Blit(canon.tex, canon.x , canon.y + 80, &canon.standRect, rotAngle);
+		Blit(cannon.tex, cannon.x , cannon.y + 80, &cannon.standRect, rotAngle);
 
 		//Draw Text
 		Blit(textTexture, 100, 100,NULL,0);

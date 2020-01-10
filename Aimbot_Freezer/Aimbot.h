@@ -1,5 +1,8 @@
 #include "SDL/include/SDL.h"
 
+struct Vec3d;
+struct Cannon;
+struct Enemy;
 
-void aimbot(Vec3d* shooter_pos, Vec3d* target_pos, float dt);
-bool collided(Vec3d* ball_pos, Vec3d* target_pos);
+void Aimbot(Cannon cannon, Enemy koopa, Ball ball, float dt);
+bool Collided(Vec3d* ball_pos, Vec3d* target_pos);

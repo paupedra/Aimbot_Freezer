@@ -134,7 +134,7 @@ int Init()
 	return 1;
 }
 
-void PreUpdate()
+const Uint8* PreUpdate()
 {
 	SDL_RenderClear(renderer);
 
@@ -168,7 +168,7 @@ void PreUpdate()
 	if (keyboard[SDL_SCANCODE_ESCAPE])
 		exitApplication = 1;
 	
-
+	return keys;
 }
 
 void PostUpdate()

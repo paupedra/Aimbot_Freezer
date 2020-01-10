@@ -1,5 +1,5 @@
 #pragma once
-
+#include "SDL/include/SDL.h"
 // Global variables /////////////////////////////////////////////////////////////
 
 /* Will be 1 when the program has to exit */
@@ -11,7 +11,7 @@ extern int exitApplication;
 int Init();
 
 /* Call it once per frame (at the beginning of the frame). */
-void PreUpdate();
+const Uint8* PreUpdate();
 
 /* Call it once per frame (at the end of the frame) */
 void PostUpdate();
