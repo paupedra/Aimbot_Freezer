@@ -20,7 +20,7 @@ Vec3d* Aimbot(Cannon cannon, Enemy koopa, Ball ball, float dt)
 
 	Vec3d force;
 	force.x = -10.0f;
-	force.y = 980.0f;
+	force.y = 98.0f;
 	force.z = 0;
 	particle ballPos;
 	ballPos.pos.x = cannon.x;
@@ -69,12 +69,12 @@ Vec3d* Aimbot(Cannon cannon, Enemy koopa, Ball ball, float dt)
 			koopaCenter_x = koopa.x + koopa.koopaRect.w / 2;
 			koopaCenter_y = koopa.y + koopa.koopaRect.h / 2;
 
-			ballCenter_x = cannon.x + ball.rect.w / 2;
-			ballCenter_y = cannon.y + ball.rect.h / 2;
+			ballCenter_x = ballPos.pos.x + ball.rect.w / 2;
+			ballCenter_y = ballPos.pos.y + ball.rect.h / 2;
 
 			int dx = ballCenter_x - koopaCenter_x;
 			int dy = ballCenter_y - koopaCenter_y;
-			if( sqrt((dx*dx)+(dy*dy)) <= 20)
+			if( sqrt((dx*dx)+(dy*dy)) <= 200)
 			{
 
 				ret = (ballPos.speed.x, ballPos.speed.y,0);
