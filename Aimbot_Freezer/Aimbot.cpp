@@ -9,7 +9,7 @@ bool Collided(Vec3d* ball_pos, Vec3d* target_pos)
 		return true;
 }
 
-void Aimbot(Cannon cannon, Enemy koopa,Ball ball, float dt)
+void Aimbot(Cannon cannon, Enemy koopa, Ball ball, float dt)
 {
 
 	Vec3d force;
@@ -23,6 +23,7 @@ void Aimbot(Cannon cannon, Enemy koopa,Ball ball, float dt)
 	ballPos.speed.x = 0.0f;
 	ballPos.speed.y = 0.0f;
 	ballPos.mass = 0.5f;
+
 	
 	int i = 0;
 	//MonteCarlo
@@ -31,23 +32,20 @@ void Aimbot(Cannon cannon, Enemy koopa,Ball ball, float dt)
 		int k = 0;
 
 		int angle = rand() % 90;
-
-
 		
 		for (int j = 0; i < 300; j++)
 		{
 			Verlet(&ballPos, &ballPos, force, dt);
 
-			if (k > 11)
-			{
-				if ((ball.ballCollider.x + ball.ballCollider.w > koopa.koopaCollider.x) && (ball.ballCollider.x < koopa.koopaCollider.x + koopa.koopaCollider.w) &&
-					(ball.ballCollider.y + ball.ballCollider.h > koopa.koopaCollider.y) && (ball.ballCollider.y < koopa.koopaCollider.y + koopa.koopaCollider.h))
-				{
 
-				}
-				k = 0;
+			if ((ball.ballCollider.x + ball.ballCollider.w > koopa.koopaCollider.x) && (ball.ballCollider.x < koopa.koopaCollider.x + koopa.koopaCollider.w) &&
+				(ball.ballCollider.y + ball.ballCollider.h > koopa.koopaCollider.y) && (ball.ballCollider.y < koopa.koopaCollider.y + koopa.koopaCollider.h))
+			{
+
+
+
 			}
-			k++;
+			
 		}
 		i++;
 	}

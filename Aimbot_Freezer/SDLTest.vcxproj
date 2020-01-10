@@ -131,6 +131,7 @@
     <ClInclude Include="j1PerfTimer.h" />
     <ClInclude Include="j1Timer.h" />
     <ClInclude Include="Log.h" />
+    <ClInclude Include="p2List.h" />
     <ClInclude Include="sdl_functions.h" />
     <ClInclude Include="Verlet.h" />
   </ItemGroup>
