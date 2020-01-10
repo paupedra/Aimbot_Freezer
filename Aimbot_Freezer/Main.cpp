@@ -95,7 +95,7 @@ int main(int argc, char* argv[])
 		{0,0,160,230},
 		{1000,10,160,230},
 		texKoopa,
-		1000,10
+		1000,500
 	};
 
 	//Ball particle
@@ -218,7 +218,7 @@ int main(int argc, char* argv[])
 		}
 		if (keys[SDL_SCANCODE_R] == KEY_DOWN)
 		{
-			if (wind.x >= 1)
+			if (wind.x >= -99)
 			{
 				wind.x--;
 			}
@@ -274,7 +274,7 @@ int main(int argc, char* argv[])
 		SDL_DestroyTexture(speedNumTex);
 		speedNumTex = Print(buffer, textColor, font);
 
-		sprintf_s(buffer, "%.0f", -wind.x);
+		sprintf_s(buffer, "%.0f", wind.x);
 		SDL_DestroyTexture(windNumTex);
 		windNumTex = Print(buffer, textColor, font);
 
