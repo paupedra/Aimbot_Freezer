@@ -100,6 +100,8 @@ int main(int argc, char* argv[])
 		frame_time.Start(); //Restart the single frame time
 
 		PreUpdate(); // Updates events
+
+		
 		
 		/* Draw the screen */
 		SDL_Rect rect;
@@ -115,6 +117,7 @@ int main(int argc, char* argv[])
 		force.z = 0;
 
 		const Uint8* keys = SDL_GetKeyboardState(NULL);
+
 		if (keys[SDL_SCANCODE_O])
 		{
 			ball_p.pos.x = 450; //Starting Position
@@ -163,6 +166,9 @@ int main(int argc, char* argv[])
 		{
 			koopa.y += 500 * dt;
 		}
+		//Update koopa collider
+		koopa.koopaCollider.x = koopa.x;
+		koopa.koopaCollider.y = koopa.y;
 
 		//Enable/Disable ball manually
 		if (keys[SDL_SCANCODE_E] == KEY_DOWN)
@@ -174,14 +180,16 @@ int main(int argc, char* argv[])
 		if (ball.enabled)
 		{
 			Verlet(&ball_p, &ball_p, force, dt);
+			ball.ballCollider.x = ball.x;
+			ball.ballCollider.y = ball.y;
 		}
-
+		
 		if (ball_p.pos.y > 740)
 		{
 			ball_p.speed.y = -ball_p.speed.y * 0.8; //Floor Bounce
 			ball_p.pos.y = 740;
 
-			ball_p.speed.x = ball_p.speed.x * 1; //Friction
+			//ball_p.speed.x = ball_p.speed.x * 1; //Friction
 			
 			if(ball_p.speed.x < 1 || ball_p.speed.x > -1)
 			{
