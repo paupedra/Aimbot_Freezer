@@ -25,16 +25,25 @@ void Aimbot(Cannon cannon, Enemy koopa, Ball ball, float dt)
 	ballPos.mass = 0.5f;
 
 	
-	int i = 0;
+
+	bool collided;
+
+
 	//MonteCarlo
-	while(i<50)
+	int i = 0;
+
+	while(i<50) // Try at most 
 	{
-		int k = 0;
+		collided = false;
+		Trajectory.clear();
 
 		int angle = rand() % 90;
 		
 		for (int j = 0; i < 300; j++)
 		{
+			
+			Trajectory.add(ballPos.pos);
+			
 			Verlet(&ballPos, &ballPos, force, dt);
 
 
@@ -42,7 +51,9 @@ void Aimbot(Cannon cannon, Enemy koopa, Ball ball, float dt)
 				(ball.ballCollider.y + ball.ballCollider.h > koopa.koopaCollider.y) && (ball.ballCollider.y < koopa.koopaCollider.y + koopa.koopaCollider.h))
 			{
 
-
+				collided = true;
+				Trajectory.add(ballPos.pos);
+				return;
 
 			}
 			

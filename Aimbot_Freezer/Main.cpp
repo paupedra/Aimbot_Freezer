@@ -191,7 +191,7 @@ int main(int argc, char* argv[])
 			ball.ballCollider.y = ball.y;
 		}
 		
-		if (ball_p.pos.y > 740)
+		/*if (ball_p.pos.y > 740)
 		{
 			ball_p.speed.y = -ball_p.speed.y * 0.8; //Floor Bounce
 			ball_p.pos.y = 740;
@@ -212,7 +212,7 @@ int main(int argc, char* argv[])
 		{
 			ball_p.speed.x = -ball_p.speed.x * 0.8;
 			ball_p.pos.x = 0;
-		}
+		}*/
 
 		
 
@@ -233,7 +233,7 @@ int main(int argc, char* argv[])
 		// Draw canon
 		Blit(cannon.tex, cannon.x, cannon.y, &cannon.rect, rotAngle);
 		//Draw stand
-		Blit(cannon.tex, cannon.x , cannon.y + 80, &cannon.standRect, rotAngle);
+		Blit(cannon.tex, cannon.x , cannon.y + 80, &cannon.standRect, 0);
 
 		//Draw Text
 		Blit(textTexture, 100, 100,NULL,0);
